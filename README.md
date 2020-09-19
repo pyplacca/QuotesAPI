@@ -9,3 +9,7 @@ https://.../popular-quotes/
 
 ## Making get requests
 You can basically visit the url above to get a random quote or optionally enter `https://.../popular-quotes/<id>` in the address bar to get a quote with a specific id.
+
+Enter `https://.../popular-quotes/all` to get all available quotes
+
+All valid responses returned are in a json format
