@@ -2,8 +2,5 @@
 *.pyc
 __pycache__
 
-# Distribution
-Lib/
-
-# Environment
-Scripts/
+Lib
+Scripts
