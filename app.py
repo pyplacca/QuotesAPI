@@ -13,7 +13,7 @@ class PopularQuotes(Resource):
 	def _get_params_(self, *reqs):
 		parser = reqparse.RequestParser()
 		for req in reqs:
-			parser.add_arguments(req)
+			parser.add_argument(req)
 		return parser.parse_args()
 
 	def delete(self, id_):
@@ -29,19 +29,33 @@ class PopularQuotes(Resource):
 		Retrieve a random quote or a quote with a specified id other than 0.
 		"""
 		quotes = qdb.get_all_quotes()
-		print(*quotes)
-		if not id_:
-			return dict(random.choice(quotes)._asdict())
 
-		if id_ == 'all':
-			return [*map(lambda quote: dict(quote._asdict()), quotes)]
+		if isinstance(id_, str):
+			if id_ == 'all':
+				return self.get_all()
+			return self.get_by_name(id_)
+
+		if not id_:
+			return dict(random.choice([*quotes])._asdict())
 
 		for quote in quotes:
 			if quote.id == id_:
 				return dict(quote._asdict()), 200
 
+		del quotes
 		return 'Quote not found', 404
 
+	def get_by_name(self, name):
+		quotes = [*qdb.get_all_quotes(by=name)]
+		if quotes:
+			return [*map(lambda quote: dict(quote._asdict()), quotes)], 200
+		return 'Author not found', 404
+
+	def get_all(self):
+		return [*map(
+			lambda quote: dict(quote._asdict()),
+			quotes
+		)], 200
 
 	def post(self, id_):
 		"""Adds/creates a new quote."""
