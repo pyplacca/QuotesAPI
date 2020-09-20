@@ -13,7 +13,7 @@ You can basically visit the url above to get a random quote or optionally enter 
 To get quotes by a specific author, you can simply append the author's name at the end of the url like so `https://pplrq.herokuapp.com/quotes/<author>`
 PS: author names are case-sensitive
 
-This `https://pplrq.herokuapp.com/quotes/Buddha` request for example would return
+This https://pplrq.herokuapp.com/quotes/Buddha request for example would return
 ```
 [
     {
@@ -35,6 +35,6 @@ This `https://pplrq.herokuapp.com/quotes/Buddha` request for example would retur
 ]
 ```
 
-`https://pplrq.herokuapp.com/quotes/authors` returns and array of all available authors
+https://pplrq.herokuapp.com/quotes/authors returns and array of all available authors
 
-`https://pplrq.herokuapp.com/quotes/all` returns an array of all available quotes.
+https://pplrq.herokuapp.com/quotes/all returns an array of all available quotes.
