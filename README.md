@@ -14,7 +14,10 @@ You can basically visit the base url to get a random quote, or optionally append
 Eg; https://pplrq.herokuapp.com/quotes/200.
 
 ### By author
-To get quotes by a specific author, append the author's name to the url like so `https://pplrq.herokuapp.com/quotes/<author>`.
+To get quotes by a specific author, append the author's name to the url 
+```
+https://pplrq.herokuapp.com/quotes/<author>
+```
 
 **PS: author names are case-sensitive**
 
