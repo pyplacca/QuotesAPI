@@ -10,29 +10,34 @@ https://.../popular-quotes/
 ## Making requests
 You can basically visit the url above to get a random quote or optionally enter `https://.../popular-quotes/<id>` in the address bar to get a quote with a specific id.
 
-To get quotes by a specific author, you can simply append the author's name at the end of the url like so `https://.../popular-quotes/<author>`;
+To get quotes by a specific author, you can simply append the author's name at the end of the url like so `https://.../popular-quotes/<author>`
+PS: author names are case-sensitive
 
-This `https://.../popular-quotes/` request for example would return
+This `(https://.../popular-quotes/Buddha)` request for example would return
 ```
 [
     {
-        "id": 2,
-        "author": "Yogi Berra",
-        "quote": "You can observe a lot just by watching."
+        "id": 11,
+        "author": "Buddha",
+        "quote": "Peace comes from within. Do not seek it without."
     },
     {
-        "id": 9,
-        "author": "Yogi Berra",
-        "quote": "Life is a learning experience, only if you learn."
+        "id": 32,
+        "author": "Buddha",
+        "quote": "Work out your own salvation. Do not depend on others."
     },
     {
-        "id": 437,
-        "author": "Yogi Berra",
-        "quote": "You got to be careful if you don't know where you're going, because you might not get there."
-    }
+        "id": 48,
+        "author": "Buddha",
+        "quote": "He is able who thinks he is able."
+    },
+    ...
 ]
 ```
 
-Enter `https://.../popular-quotes/all` to get all available quotes.
+`https://.../popular-quotes/authors` returns and array of all available authors
+
+`https://.../popular-quotes/all` returns an array of all available quotes.
+
 
 *All valid responses returned are in a json format.*
