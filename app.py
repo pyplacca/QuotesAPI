@@ -119,7 +119,4 @@ api.add_resource(
 
 
 if __name__ == '__main__':
-	try:
-		app.run(debug=True)
-	except KeyboardInterrupt:
-		print('Server closed!')
+	app.run(debug=True)
