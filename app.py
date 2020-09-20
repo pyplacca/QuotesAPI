@@ -111,10 +111,10 @@ api = Api(app)
 api.add_resource(
 	PopularQuotes,
 	# resource urls
-	'/popular-quotes',
-	'/popular-quotes/',
-	'/popular-quotes/<int:id_>',
-	'/popular-quotes/<string:id_>'
+	'/quotes',
+	'/quotes/',
+	'/quotes/<int:id_>',
+	'/quotes/<string:id_>'
 )
 
 
