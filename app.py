@@ -4,14 +4,10 @@ from flask import Flask
 from flask_restful import Api, Resource, reqparse
 import random
 import json
+import db
 
 
-QUOTES = []
-with open('quotes.json') as file:
-	QUOTES = json.load(file)
-
-
-class Quote(Resource):
+class PopularQuotes(Resource):
 	"""Quotes interface."""
 
 	def _get_params_(self, *reqs):
@@ -22,26 +18,27 @@ class Quote(Resource):
 
 	def delete(self, id_):
 		"""Delete an existing quote with the specified id."""
-		global QUOTES
-		QUOTES = [*filter(
-			lambda quote: quote['id'] != id_,
-			QUOTES
-		)]
-		return f'Quote with id {id_} has been successfully deleted.', 200
+		res = qdb.delete_quote(id_)
+		if res:
+			return f'Quote with id {id_} has been successfully deleted.', 200
+		else:
+			return f'Quote with id {id_} does not exist!', 404
 
 	def get(self, id_=0):
 		"""
 		Retrieve a random quote or a quote with a specified id other than 0.
 		"""
+		quotes = qdb.get_all_quotes()
+		print(*quotes)
 		if not id_:
-			return random.choice(QUOTES)
+			return dict(random.choice(quotes)._asdict())
 
 		if id_ == 'all':
-			return QUOTES
+			return [*map(lambda quote: dict(quote._asdict()), quotes)]
 
-		for quote in QUOTES:
-			if quote['id'] == id_:
-				return quote, 200
+		for quote in quotes:
+			if quote.id == id_:
+				return dict(quote._asdict()), 200
 
 		return 'Quote not found', 404
 
@@ -49,37 +46,36 @@ class Quote(Resource):
 	def post(self, id_):
 		"""Adds/creates a new quote."""
 
-		for quote in QUOTES:
-			if quote['id'] == id_:
-				return f"Quote with id {id_} already exists", 400
+		if qdb.exists(id_):
+			return f"Quote with id {id_} already exists", 400
 
 		params = self._get_params_('author', 'quote')
-		quote = {
-			"id": int(id_),
-			"author": params["author"],
-			"quote": params["quote"]
-		}
-
-		QUOTES.append(quote)
+		qdb.add_quote(
+			id=int(id_),
+			author=params['author'],
+			quote=params['quote']
+		)
 		return quote, 201
 
 	def put(self, id_):
-		"""Add or modify an existing quote with the specified id."""
+		"""Modify existing quote with specified id."""
 
 		params = self._get_params_('author', 'quote')
-		for quote in QUOTES:
-			if quote['id'] == id_:
-				quote['author'] = params['author']
-				quote['quote'] = params['quote']
-				return quote, 200
+		try:
+			with database.connection:
+				database.connection.execute(
+					"UPDATE quotes SET author=?, quote=? WHERE id=?",
+					(params['author'], params['quote'], id_)
+				)
+			return quote, 200
+		except (db.sql.OperationalError, db.sql.IntegrityError) as error:
+			print(error)
+			self.post(id_)
+			return quote, 201
 
-		quote = {
-			'id': id_,
-			'author': params['author'],
-			'quote': params['quote']
-		}
-		QUOTES.append(quote)
-		return quote, 201
+
+# connect to quotes database
+qdb = db.QuotesDB('database.db')
 
 
 # setup application
@@ -88,14 +84,17 @@ api = Api(app)
 
 # add resource to api
 api.add_resource(
-	Quote,
+	PopularQuotes,
 	# resource urls
-	'/some-quotes',
-	'/some-quotes/',
-	'/some-quotes/<int:id_>',
-	'/some-quotes/<string:id_>'
+	'/popular-quotes',
+	'/popular-quotes/',
+	'/popular-quotes/<int:id_>',
+	'/popular-quotes/<string:id_>'
 )
 
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	try:
+		app.run(debug=True)
+	except KeyboardInterrupt:
+		print('Server closed!')
