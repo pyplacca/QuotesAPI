@@ -33,6 +33,8 @@ class PopularQuotes(Resource):
 		if isinstance(id_, str):
 			if id_ == 'all':
 				return self.get_all()
+			if id_ == 'authors':
+				return self.get_authors()
 			return self.get_by_name(id_)
 
 		if not id_:
@@ -56,6 +58,15 @@ class PopularQuotes(Resource):
 			lambda quote: dict(quote._asdict()),
 			quotes
 		)], 200
+
+	def get_authors(self):
+		with qdb.connection:
+			qdb.cursor.execute(
+				"SELECT author FROM quotes"
+			)
+			result, = [*zip(*qdb.cursor.fetchall())]
+			return sorted({*result})
+
 
 	def post(self, id_):
 		"""Adds/creates a new quote."""
