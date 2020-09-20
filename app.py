@@ -32,7 +32,7 @@ class PopularQuotes(Resource):
 
 		if isinstance(id_, str):
 			if id_ == 'all':
-				return self.get_all()
+				return self.get_all(quotes)
 			if id_ == 'authors':
 				return self.get_authors()
 			return self.get_by_name(id_)
@@ -53,7 +53,7 @@ class PopularQuotes(Resource):
 			return [*map(lambda quote: dict(quote._asdict()), quotes)], 200
 		return 'Author not found', 404
 
-	def get_all(self):
+	def get_all(self, quotes):
 		return [*map(
 			lambda quote: dict(quote._asdict()),
 			quotes
