@@ -10,7 +10,7 @@ import db
 class PopularQuotes(Resource):
 	"""Quotes interface."""
 
-	def _get_params_(self, *reqs):
+	def _get_params(self, *reqs):
 		parser = reqparse.RequestParser()
 		for req in reqs:
 			parser.add_argument(req)
@@ -65,7 +65,7 @@ class PopularQuotes(Resource):
 				"SELECT author FROM quotes"
 			)
 			result, = [*zip(*qdb.cursor.fetchall())]
-			return sorted({*result})
+			return sorted({*result}), 200
 
 
 	def post(self, id_):
@@ -74,7 +74,7 @@ class PopularQuotes(Resource):
 		if qdb.exists(id_):
 			return f"Quote with id {id_} already exists", 400
 
-		params = self._get_params_('author', 'quote')
+		params = self._get_params('author', 'quote')
 		qdb.add_quote(
 			id=int(id_),
 			author=params['author'],
@@ -85,7 +85,7 @@ class PopularQuotes(Resource):
 	def put(self, id_):
 		"""Modify existing quote with specified id."""
 
-		params = self._get_params_('author', 'quote')
+		params = self._get_params('author', 'quote')
 		try:
 			with database.connection:
 				database.connection.execute(
