@@ -1,6 +1,6 @@
 # Popular Quotes API
 
-A simple a RESTful API built with Flask. This api was built for learning sake.
+A simple RESTful API built with Flask. This api was built for learning sake.
 
 The quotes provided by this api were originally sourced from a resource I can't remember. Either way, all credits to the provider.
 
