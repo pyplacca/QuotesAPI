@@ -16,7 +16,7 @@ Eg; https://pplrq.herokuapp.com/quotes/200.
 ### By author
 To get quotes by a specific author, append the author's name to the url 
 ```
-https://pplrq.herokuapp.com/quotes/<author>
+https://pplrq.herokuapp.com/quotes/<author-name>
 ```
 
 **PS: author names are case-sensitive**
